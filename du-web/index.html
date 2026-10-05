@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DU — Журнал оценок</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/styles/tokens.css">
+<link rel="stylesheet" href="src/styles/app.css">
+</head>
+<body>
+
+<!-- ============ Авторизация ============ -->
+<div id="auth">
+  <main class="card">
+    <div class="logo"><img class="logo-l" src="assets/aitu-logo.svg" alt="Astana IT University"><img class="logo-d" src="assets/aitu-logo-dark.svg" alt="Astana IT University"></div>
+    <div class="head">
+      <h1 data-t="welcome">Добро пожаловать в DU</h1>
+      <p data-t="enterBoth">Введите логин и пароль</p>
+    </div>
+    <form id="form" novalidate>
+      <div class="fields">
+        <div class="alert" id="alert" role="alert" data-t="errBoth">Неправильный логин или пароль</div>
+        <div class="field" id="f-login">
+          <label class="input"><input id="login" autocomplete="username" data-tp="loginPh" placeholder="Введите логин" aria-label="Логин" aria-describedby="h-login"></label>
+          <div class="helper" id="h-login"></div>
+        </div>
+        <div class="field" id="f-pass">
+          <label class="input">
+            <input id="pass" type="password" autocomplete="current-password" data-tp="passPh" placeholder="Введите пароль" aria-label="Пароль" aria-describedby="h-pass">
+            <button type="button" class="eye" id="eye" aria-label="Показать пароль" aria-pressed="false"></button>
+          </label>
+          <div class="helper" id="h-pass"></div>
+        </div>
+      </div>
+      <button class="btn" type="submit" id="submit" data-t="signin">Войти</button>
+    </form>
+    <button class="link demo-btn" id="demo" type="button" data-t="demo">Войти в демо</button>
+  </main>
+</div>
+
+<!-- ============ Журнал ============ -->
+<div id="app" hidden>
+  <header class="topbar">
+    <div class="logo"><img class="logo-l" src="assets/aitu-logo.svg" alt="Astana IT University"><img class="logo-d" src="assets/aitu-logo-dark.svg" alt="Astana IT University"></div>
+    <div class="actions">
+      <div class="pop">
+        <button class="icon-btn" id="langBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Язык">RU</button>
+        <div class="menu" id="langMenu" role="menu" hidden>
+          <button role="menuitemradio" data-lang="kz">Қазақша</button>
+          <button role="menuitemradio" data-lang="ru">Русский</button>
+          <button role="menuitemradio" data-lang="en">English</button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" aria-label="Тёмная тема"></button>
+      <div class="pop">
+        <button class="icon-btn soft" id="bellBtn" aria-haspopup="true" aria-expanded="false" aria-label="Уведомления"></button>
+        <div class="menu" id="bellMenu" hidden><div class="empty" data-t="noNotif">Новых уведомлений нет</div></div>
+      </div>
+      <div class="pop">
+        <button class="user" id="userBtn" aria-haspopup="menu" aria-expanded="false">
+          <span class="who">
+            <span class="avatar" aria-hidden="true">AD</span>
+            <span class="txt"><span class="mail">231900@astanait.edu.kz</span><br><span class="role" data-t="employee">Сотрудник</span></span>
+          </span>
+          <span id="userChev"></span>
+        </button>
+        <div class="menu" id="userMenu" role="menu" hidden>
+          <button role="menuitem" id="logout" data-t="logout">Выйти</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Разделы">
+      <div class="group" id="grp" data-open="true">
+        <button class="group-head" id="grpHead" aria-expanded="true">
+          <span id="grpIcon"></span>
+          <span id="grpChev"></span>
+        </button>
+        <div class="tabs">
+          <button class="tab" data-view="settings" data-t="settings">Настройки</button>
+          <button class="tab" data-view="journal" data-t="journal">Журнал</button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main" id="main"></main>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span class="ok" id="toastIc"></span><span id="toastText"></span></div>
+
+<script src="src/js/icons.js"></script>
+<script src="src/js/i18n.js"></script>
+<script src="src/js/main.js"></script>
+</body>
+</html>
