@@ -2,21 +2,30 @@
 
 Прототип веб-платформы DU: авторизация + модуль «Журнал оценок».
 Перенесён из чата claude.ai, где собирался по макетам Figma.
+Стек: React 18 + Vite + Mantine UI 7 (переведено с ванильного HTML/CSS/JS).
 
 ## Запуск
-Открыть `index.html` в браузере, сборки нет. Либо: `npx serve .`
+`npm install`, затем `npm run dev` (Vite, по умолчанию порт 5177 — см. `.claude/launch.json`).
 Демо-вход: кнопка «Войти в демо» или `admin` / `admin123`.
 
 ## Структура
-- `index.html` — разметка: экран входа (`#auth`) и приложение (`#app`).
-- `src/styles/tokens.css` — дизайн-токены из Figma + тёмная тема.
-- `src/styles/app.css` — стили компонентов.
-- `src/js/icons.js` — иконки Lucide (inline SVG), хелпер `ic(name, size, stroke)`.
-- `src/js/i18n.js` — тексты RU / KZ / EN (объект `T`).
-- `src/js/main.js` — логика: тема, поповеры, авторизация, сайдбар, рендер экранов, пагинация, тосты.
-- `assets/` — логотип AITU (светлый/тёмный), конвертирован из брендбукового .ai.
+- `index.html` — точка входа Vite, монтирует `#root`.
+- `src/main.jsx` — `MantineProvider`, `Notifications`, `LangProvider`.
+- `src/theme.js` — тема Mantine: радиусы, цвет `brand` (`#006fff`), кастомная палитра `dark.*`
+  подогнана под тёмные токены Figma (`--mantine-color-text/dimmed/placeholder/default/body` и т.д.
+  уже совпадают со светлой палитрой Mantine `gray.*` — так был сделан макет).
+- `src/i18n.jsx` — тексты RU / KZ / EN (объект `T`) + `LangProvider`/`useI18n()`, язык в `localStorage`.
+- `src/styles.css` — то, что не покрывается темой Mantine напрямую: фон под auth/app (`--bg-page`/`--bg-app`
+  не имеют готового аналога в Mantine), переключение свет/тёмный логотип, активная вкладка сайдбара,
+  адаптив `@media (max-width:860px)`.
+- `src/components/` — `AuthScreen`, `Shell` (топбар + сайдбар + контент), `TopBar`, `Sidebar`,
+  `SettingsView` (таблица лет, `Pagination`, `Select`), `JournalView`, `YearDetailView`, `Logo`.
+- `public/assets/` — логотип AITU (светлый/тёмный), конвертирован из брендбукового .ai.
 
-Скрипты подключены классическими `<script>` (не модулями), чтобы работало с file://.
+Иконки — `lucide-react` (не `@tabler/icons-react`, чтобы сохранить правило «иконки — только Lucide»).
+Тёмная/светлая тема — встроенный механизм Mantine (`useMantineColorScheme`/`useComputedColorScheme`,
+persist в `localStorage` из коробки), не собственная реализация.
+Тосты — `@mantine/notifications` вместо самодельного `.toast`.
 
 ## Figma
 - Файл: `DU-Web-Platform`, fileKey `k8zY5GL9EjxpV3yVkgLvAp`.

@@ -1,0 +1,112 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+/* page gutter behind the layout — Figma "background/default-hover" */
+body {
+  background: var(--mantine-color-gray-0);
+}
+[data-mantine-color-scheme="dark"] body {
+  background: #141619;
+}
+
+/* login screen background — Figma "background/disabled/default" */
+.du-auth-bg {
+  background: var(--mantine-color-gray-2);
+}
+[data-mantine-color-scheme="dark"] .du-auth-bg {
+  background: #141619;
+}
+
+/* logo: swap light/dark artwork with the resolved color scheme */
+.du-logo-light,
+.du-logo-dark {
+  display: block;
+}
+.du-logo-dark {
+  display: none;
+}
+[data-mantine-color-scheme="dark"] .du-logo-light {
+  display: none;
+}
+[data-mantine-color-scheme="dark"] .du-logo-dark {
+  display: block;
+}
+
+.du-sidebar-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  width: 203px;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--mantine-color-text);
+}
+.du-sidebar-tab::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--mantine-color-default-border);
+}
+.du-sidebar-tab[data-active="true"]::before {
+  background: var(--mantine-color-text);
+}
+.du-sidebar-tab[data-active="true"] {
+  background: var(--mantine-color-brand-light);
+  color: var(--mantine-color-brand-6);
+}
+.du-sidebar-tab:hover:not([data-active="true"]) {
+  background: var(--mantine-color-gray-0);
+}
+[data-mantine-color-scheme="dark"] .du-sidebar-tab:hover:not([data-active="true"]) {
+  background: var(--mantine-color-dark-6);
+}
+
+.du-year-link {
+  font-weight: 600;
+}
+
+@media (max-width: 860px) {
+  .du-layout {
+    flex-direction: column;
+  }
+  .du-sidebar {
+    width: 100% !important;
+    padding: 8px 16px !important;
+  }
+  .du-sidebar-group,
+  .du-sidebar-tab {
+    width: 100% !important;
+  }
+  .du-topbar {
+    padding: 12px 16px !important;
+  }
+  .du-actions {
+    gap: 8px !important;
+  }
+  .du-user {
+    width: auto !important;
+  }
+  .du-user-text {
+    display: none;
+  }
+  .du-main {
+    padding: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation-duration: 0s !important;
+  }
+}
