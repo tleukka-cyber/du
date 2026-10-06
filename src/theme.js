@@ -1,6 +1,14 @@
-import { createTheme } from "@mantine/core";
+import { createTheme, Input } from "@mantine/core";
 
 export const theme = createTheme({
+  components: {
+    InputWrapper: Input.Wrapper.extend({
+      styles: {
+        label: { display: "block", fontWeight: 600, lineHeight: "20px" },
+        description: { lineHeight: "16px", marginTop: 0, marginBottom: 0 },
+      },
+    }),
+  },
   fontFamily: 'Roboto, system-ui, -apple-system, "Segoe UI", Arial, sans-serif',
   headings: {
     fontFamily: 'Roboto, system-ui, -apple-system, "Segoe UI", Arial, sans-serif',

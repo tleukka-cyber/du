@@ -1,25 +1,35 @@
 import { useState } from "react";
-import { Box, Stack, Text, Title } from "@mantine/core";
+import { Box, Stack } from "@mantine/core";
 import { useI18n } from "../i18n";
+import { useData } from "../data/store";
 import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
+import PageHeader from "./PageHeader";
 import SettingsView from "./SettingsView";
-import JournalView from "./JournalView";
-import YearDetailView from "./YearDetailView";
+import YearSettingsForm from "./YearSettingsForm";
+import JournalModule from "./journal/JournalModule";
+import AcademicGroupsModule from './academic/AcademicGroupsModule';
 
 export default function Shell({ onLogout }) {
   const { t } = useI18n();
+  const { years, yearSettings, saveYearSettings, copySettings } = useData();
   const [view, setView] = useState("settings");
   const [year, setYear] = useState(null);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(30);
+  // bumped when the sidebar "Journal" tab is clicked, so the module returns to the journal list
+  const [journalHome, setJournalHome] = useState(0);
 
   const changeView = (next) => {
     setView(next);
     setYear(null);
+    if (next === "journal") setJournalHome((n) => n + 1);
   };
 
-  const title = year ? t("openYear")(year) : view === "journal" ? t("journal") : t("settings");
+  const openYearSettings = (y) => {
+    setView("settings");
+    setYear(y);
+  };
 
   return (
     <Box style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
@@ -28,19 +38,21 @@ export default function Shell({ onLogout }) {
         <Sidebar view={view} onViewChange={changeView} />
         <Box component="main" className="du-main" style={{ flex: 1, minWidth: 0 }} p="24px">
           <Stack gap="16px">
-            <Box bg="var(--mantine-color-body)" style={{ borderRadius: 8 }} p="16px">
-              <Text fw={600} c="dimmed">
-                {t("gradebook")}
-              </Text>
-              <Title order={2} style={{ fontSize: 24, lineHeight: "32px", fontWeight: 700, margin: 0 }}>
-                {title}
-              </Title>
-            </Box>
+            {view === 'academicGroups' && <AcademicGroupsModule />}
+            {view === "journal" && <JournalModule home={journalHome} onOpenSettings={openYearSettings} />}
 
-            {view === "journal" && <JournalView />}
+            {view === "settings" && (
+              <PageHeader
+                crumbs={year ? [{ label: t("settings"), onClick: () => setYear(null) }, { label: t("openYear")(year) }] : null}
+                eyebrow={year ? t("settings") : t("gradebook")}
+                title={year ? t("openYear")(year) : t("settings")}
+              />
+            )}
 
             {view === "settings" && !year && (
               <SettingsView
+                years={years}
+                onCopy={copySettings}
                 page={page}
                 perPage={perPage}
                 onPageChange={setPage}
@@ -52,7 +64,13 @@ export default function Shell({ onLogout }) {
               />
             )}
 
-            {view === "settings" && year && <YearDetailView year={year} onBack={() => setYear(null)} />}
+            {view === "settings" && year && (
+              <YearSettingsForm
+                key={year}
+                initialValues={yearSettings[year] ?? {}}
+                onSave={(values) => saveYearSettings(year, values)}
+              />
+            )}
           </Stack>
         </Box>
       </Box>

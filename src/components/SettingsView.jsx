@@ -1,20 +1,37 @@
+import { useState } from "react";
 import { Stack, Text, Table, Group, Select, Pagination, Button, Box, ScrollArea } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { Check } from "lucide-react";
 import { useI18n } from "../i18n";
+import CopySettingsModal from "./CopySettingsModal";
 
-export const YEARS = ["2025-2026", "2024-2025", "2023-2024", "2022-2023", "2021-2022"];
+// years are "YYYY-YYYY", so string order is chronological
+const nextYear = (years) => {
+  const start = Math.max(...years.map((y) => Number(y.slice(0, 4))));
+  return `${start + 1}-${start + 2}`;
+};
 
-export default function SettingsView({ page, perPage, onPageChange, onPerPageChange, onOpenYear }) {
+export default function SettingsView({ years, page, perPage, onPageChange, onPerPageChange, onOpenYear, onCopy }) {
   const { t } = useI18n();
-  const total = YEARS.length;
+  const [copyOpened, setCopyOpened] = useState(false);
+  const [copySource, setCopySource] = useState(null);
+
+  const total = years.length;
   const pages = Math.max(1, Math.ceil(total / perPage));
   const currentPage = Math.min(page, pages);
-  const rows = YEARS.slice((currentPage - 1) * perPage, currentPage * perPage);
+  const rows = years.slice((currentPage - 1) * perPage, currentPage * perPage);
+  const copyTargets = copySource ? [nextYear(years), ...years.filter((y) => y !== copySource)] : [];
 
-  const copy = (year) => {
+  const openCopy = (year) => {
+    setCopySource(year);
+    setCopyOpened(true);
+  };
+
+  const copy = (source, target) => {
+    onCopy(source, target);
+    setCopyOpened(false);
     notifications.show({
-      message: t("copied")(year),
+      message: t("copied"),
       icon: <Check size={14} strokeWidth={3} />,
       color: "teal",
       radius: "md",
@@ -24,6 +41,13 @@ export default function SettingsView({ page, perPage, onPageChange, onPerPageCha
 
   return (
     <Box bg="var(--mantine-color-default)" style={{ borderRadius: 8 }} p="16px">
+      <CopySettingsModal
+        opened={copyOpened}
+        source={copySource}
+        targets={copyTargets}
+        onClose={() => setCopyOpened(false)}
+        onCopy={copy}
+      />
       <Stack gap="16px">
         <Text c="dimmed">
           {t("total")}: {total}
@@ -63,7 +87,7 @@ export default function SettingsView({ page, perPage, onPageChange, onPerPageCha
                         size="xs"
                         w={119}
                         h={32}
-                        onClick={() => copy(y)}
+                        onClick={() => openCopy(y)}
                       >
                         {t("copy")}
                       </Button>

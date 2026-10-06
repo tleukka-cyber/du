@@ -71,11 +71,198 @@ body {
   background: var(--mantine-color-dark-6);
 }
 
+/* Figma Label + Input: 4px between the description and the field (Mantine default is 5px) */
+.mantine-InputWrapper-description + .mantine-Input-wrapper {
+  margin-top: 4px;
+}
+
+/* toasts sit below the 74px top bar, as in Figma; only top-right is offset —
+   setting `top` on every container stretches the bottom-* ones over the page and eats clicks */
+.mantine-Notifications-root[data-position="top-right"] {
+  top: 82px;
+}
+
+/* Figma text/default: #212529 light, #dee2e6 dark */
+.du-text-default {
+  color: var(--mantine-color-gray-9);
+}
+[data-mantine-color-scheme="dark"] .du-text-default {
+  color: var(--mantine-color-dark-1);
+}
+
 .du-year-link {
   font-weight: 600;
 }
 
+.du-academic-card {
+  background: var(--mantine-color-body);
+  border-radius: 8px;
+}
+.du-academic-table-wrap {
+  overflow: auto;
+  max-height: calc(100vh - 420px);
+  min-height: 260px;
+}
+.du-academic-table {
+  min-width: 1290px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.du-academic-table th { font-weight: 600; padding: 8px 12px; vertical-align: top; }
+.du-academic-table td { padding: 14px 12px; height: 84px; }
+.du-academic-table th[rowspan]:last-child,
+.du-academic-table td:last-child {
+  position: sticky;
+  right: 0;
+  background: var(--mantine-color-body);
+  box-shadow: -4px 0 8px -6px rgba(0, 0, 0, .2);
+  z-index: 1;
+}
+.du-academic-table thead { position: sticky; top: 0; z-index: 2; background: var(--mantine-color-body); }
+.du-academic-table th[rowspan] { vertical-align: bottom; }
+.du-academic-table th .mantine-Input-wrapper { border-bottom: 1px solid var(--mantine-color-default-border); margin-top: 10px; }
+.du-academic-sort { display: flex; align-items: center; gap: 6px; font-weight: 600; min-height: 20px; }
+.du-academic-sort svg { flex-shrink: 0; color: var(--mantine-color-dimmed); }
 @media (max-width: 860px) {
+  .du-academic-table-wrap { max-height: 60vh; }
+}
+
+/* ===== Journal grid (Figma 26027:1168577): scrolls both ways, sticky header row and student column ===== */
+.du-jt-wrap {
+  --jt-name-w: 260px;
+  --jt-cell-bg: var(--mantine-color-body);
+  /* sticky cells must be opaque, so translucent Figma fills are mixed onto the body colour */
+  --jt-head-bg: color-mix(in srgb, var(--mantine-color-gray-6) 10%, var(--mantine-color-body));
+  --jt-rk-bg: color-mix(in srgb, var(--mantine-color-blue-6) 10%, var(--mantine-color-body));
+  --jt-ok-bg: color-mix(in srgb, var(--mantine-color-teal-6) 12%, var(--mantine-color-body));
+  --jt-fail-bg: color-mix(in srgb, var(--mantine-color-red-6) 12%, var(--mantine-color-body));
+  --jt-hover-bg: color-mix(in srgb, var(--mantine-color-brand-6) 6%, var(--mantine-color-body));
+  overflow: auto;
+  max-height: max(360px, calc(100vh - 300px));
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: 16px;
+  background: var(--jt-cell-bg);
+}
+.du-jt-wrap:focus-visible {
+  outline: 2px solid var(--mantine-color-brand-6);
+  outline-offset: 2px;
+}
+.du-jt {
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 100%;
+  font-size: 14px;
+  line-height: 20px;
+}
+.du-jt th,
+.du-jt td {
+  background: var(--jt-cell-bg);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  padding: 0 12px;
+  white-space: nowrap;
+}
+.du-jt td {
+  height: 60px;
+}
+.du-jt thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 52px;
+  background: var(--jt-head-bg);
+  font-weight: 600;
+  text-align: left;
+}
+.du-jt .du-jt-name {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  width: var(--jt-name-w);
+  min-width: var(--jt-name-w);
+  max-width: var(--jt-name-w);
+  white-space: normal;
+  border-right: 1px solid var(--mantine-color-default-border);
+  box-shadow: 4px 0 6px -2px rgba(0, 0, 0, 0.12);
+}
+.du-jt thead .du-jt-name {
+  z-index: 3;
+}
+.du-jt .du-jt-num {
+  min-width: 72px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.du-jt .du-jt-att {
+  min-width: 112px;
+}
+.du-jt-head {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+.du-jt-head abbr {
+  text-decoration: none;
+  cursor: help;
+}
+.du-jt-sub {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--mantine-color-dimmed);
+}
+.du-jt .du-jt-rk {
+  background: var(--jt-rk-bg);
+}
+.du-jt .du-jt-total {
+  min-width: 80px;
+}
+.du-jt .du-jt-rd {
+  min-width: 96px;
+}
+.du-jt td.du-jt-rd[data-status="ok"] {
+  background: var(--jt-ok-bg);
+}
+.du-jt td.du-jt-rd[data-status="fail"] {
+  background: var(--jt-fail-bg);
+}
+.du-jt .du-jt-sep {
+  border-left: 2px solid var(--mantine-color-default-border);
+}
+.du-jt td[data-empty] {
+  color: var(--mantine-color-dimmed);
+}
+/* below the year's admission threshold */
+.du-jt td[data-bad] {
+  color: var(--mantine-color-error);
+  font-weight: 600;
+}
+/* hover keeps the RK tint and RD status fill, so only plain cells change */
+.du-jt tbody tr:hover td:not(.du-jt-rk):not(.du-jt-rd) {
+  background: var(--jt-hover-bg);
+}
+.du-jt tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.du-clickable-row {
+  cursor: pointer;
+}
+.du-clickable-row:hover td {
+  background: var(--mantine-color-gray-0);
+}
+[data-mantine-color-scheme="dark"] .du-clickable-row:hover td {
+  background: var(--mantine-color-dark-6);
+}
+
+/* edit-scores modal: highlight changed values */
+.du-cell-changed input {
+  background: var(--mantine-color-yellow-light);
+}
+
+@media (max-width: 860px) {
+  .du-jt-wrap {
+    --jt-name-w: 170px;
+  }
   .du-layout {
     flex-direction: column;
   }

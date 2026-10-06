@@ -7,6 +7,7 @@ import "@mantine/notifications/styles.css";
 import "./styles.css";
 import { theme } from "./theme";
 import { LangProvider } from "./i18n";
+import { DataProvider } from "./data/store";
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <MantineProvider theme={theme} defaultColorScheme="auto">
       <Notifications position="top-right" />
       <LangProvider>
-        <App />
+        <DataProvider>
+          <App />
+        </DataProvider>
       </LangProvider>
     </MantineProvider>
   </React.StrictMode>
